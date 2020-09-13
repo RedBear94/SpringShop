@@ -19,17 +19,17 @@ public class MainApp {
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ProductRepository productRepository = context.getBean("productRepository", ProductRepository.class);
-        Card card = context.getBean("card", Card.class);
-        Card card2 = context.getBean("card", Card.class);
+        Cart cart = context.getBean("cart", Cart.class);
+        Cart cart2 = context.getBean("cart", Cart.class);
 
-        card.save(productRepository.findProductById(2L));
-        card.save(productRepository.findProductById(5L));
-        System.out.println(card);
+        cart.addProductById(2L);
+        cart.addProductById(5L);
+        System.out.println(cart);
 
-        card.delete(productRepository.findProductById(2L));
-        System.out.println(card);
+        cart.deleteProductById(2L);
+        System.out.println(cart);
 
-        System.out.println(card2); // empty
+        System.out.println(cart2); // empty
 
         context.close();
     }
