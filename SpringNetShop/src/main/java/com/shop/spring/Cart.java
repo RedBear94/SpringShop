@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,20 +24,28 @@ public class Cart {
     }
 
     public void addProductById(Long id) {
-        this.products.add(productRepository.findProductById(id));
+        try {
+            this.products.add(productRepository.findProductById(id));
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteProductById(Long id) {
-        this.products.remove(getProductById(id));
+        try {
+            this.products.remove(getProductById(id));
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
-    public Product getProductById(Long id){
+    public Product getProductById(Long id) throws ResourceNotFoundException {
         for (Product p : products) {
             if (p.getId().equals(id)) {
                 return p;
             }
         }
-        throw new RuntimeException("Item not found");
+        throw new ResourceNotFoundException("Product with id=" + id + " not found");
     }
 
     @Override
