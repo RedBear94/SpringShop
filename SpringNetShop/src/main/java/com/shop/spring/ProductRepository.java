@@ -30,12 +30,12 @@ public class ProductRepository {
         return Collections.unmodifiableList(products);
     }
 
-    public Product findProductById(Long id) {
+    public Product findProductById(Long id) throws ResourceNotFoundException {
         for (Product p : products) {
             if (p.getId().equals(id)) {
                 return p;
             }
         }
-        throw new RuntimeException("Item not found");
+        throw new ResourceNotFoundException("Product with id=" + id + " not found");
     }
 }
