@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 // Сервисы используется для доп. обработки
@@ -18,10 +18,6 @@ import java.util.Optional;
 @AllArgsConstructor // Конструктор со всеми полями
 public class ProductService {
     private ProductRepository productRepository;
-
-    public Page<Product> findAll(int page, int size) {
-        return productRepository.findAll(PageRequest.of(page, size));
-    }
 
     // Вернет контейнер
     public Optional<Product> findById(Long id){
@@ -32,12 +28,17 @@ public class ProductService {
         return productRepository.findOneById(id);
     }
 
-    public List<Product> findAllByPriceGreaterThan(int min){
-        return productRepository.findAllByPriceGreaterThan(min);
+    public Page<Product> findAll(Specification<Product> spec, int page, int size) {
+        // select p from Product p where price >= 1? and price <= ?2 - собирается полная фильткрация если все параметры не null
+        return productRepository.findAll(spec, PageRequest.of(page, size, Sort.by("id")));
     }
 
-    public List<Product> findAllByPriceGreaterThanAndPriceLessThan(int min, int max){
-        List<Product> filteredProducts = productRepository.findAllByPriceGreaterThanAndPriceLessThan(min, max);
-        return productRepository.findAllByPriceGreaterThanAndPriceLessThan(min, max);
+    public void updateById(Long id, String title, int price){
+        Product product = productRepository.findById(id).get();
+        if(title != null)
+            product.setTitle(title);
+        if(price > 0)
+            product.setPrice(price);
+        productRepository.save(product);
     }
 }
