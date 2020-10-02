@@ -33,12 +33,11 @@ public class ProductService {
         return productRepository.findAll(spec, PageRequest.of(page, size, Sort.by("id")));
     }
 
-    public void updateById(Long id, String title, int price){
-        Product product = productRepository.findById(id).get();
-        if(title != null)
-            product.setTitle(title);
-        if(price > 0)
-            product.setPrice(price);
-        productRepository.save(product);
+    public Product saveOrUpdate(Product product) {
+        return productRepository.save(product);
+    }
+
+    public void deleteById(Long id){
+        productRepository.deleteById(id);
     }
 }

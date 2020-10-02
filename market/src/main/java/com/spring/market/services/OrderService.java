@@ -1,6 +1,7 @@
 package com.spring.market.services;
 
 import com.spring.market.entities.Order;
+import com.spring.market.entities.Product;
 import com.spring.market.repositories.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,5 +15,9 @@ public class OrderService {
 
     public List<Order> findAll(){
         return orderRepository.findAll();
+    }
+
+    public Order saveOrUpdate(Order order) {
+        return orderRepository.save(order);
     }
 }

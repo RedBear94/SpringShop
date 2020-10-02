@@ -55,7 +55,11 @@
             <td th:text="${p.id}"/>
             <td th:text="${p.title}"/>
             <td th:text="${p.price}"/>
-            <td><a th:href="@{'/products/' + ${p.id}}">Редактировать</a></td>
+            <td>
+                <a class="btn btn-success" th:href="@{'/cart/add/' + ${p.id}}">В корзину</a>
+                <a class="btn btn-danger" th:href="@{'/products/edit/' + ${p.id}}">Изменить</a>
+            </td>
+
         </tr>
         </tbody>
     </table>
@@ -66,38 +70,10 @@
                 <a class="page-link"
                    th:href="@{'/products?p=' + ${products.previousOrFirstPageable().getPageNumber() + 1} + ${filterDefinition}}">Назад</a>
             </li>
-
-            <!-- Не рабочая идея
-            <li class="page-item" th:each="i : ${#numbers.sequence(
-            ${products.getNumber() + 1 <= 2 ? 1 : products.previousOrFirstPageable().getPageNumber() - 1 },
-            ${products.getNumber() + 1 >= products.getTotalPages() - 1  ? products.getTotalPages() : products.nextOrLastPageable().getPageNumber() + 2}
-            )}">
-                <a class="page-link" th:text="${i}" th:href="@{'/products?p=' + ${i} + ${filterDefinition}}"></a>
-            </li>
-            -->
-
-            <li class="page-item" th:each="i : ${#numbers.sequence(products.previousOrFirstPageable().getPageNumber(),
-             products.nextOrLastPageable().getPageNumber() + 2)}"
-                th:classappend="${products.getNumber() + 1 == i ? 'active' : ''}"
-                th:if="${(products.getNumber() + 1 > 2) and (products.getNumber() + 1 <= products.getTotalPages() - 2) and products.totalPages >= 4}">
-                <a class="page-link" th:text="${i}" th:href="@{'/products?p=' + ${i} + ${filterDefinition}}"></a>
-            </li>
-
-            <li class="page-item" th:each="i : ${#numbers.sequence(1, products.getNumber() + 3)}"
-                th:classappend="${products.getNumber() + 1 == i ? 'active' : ''}"
-                th:if="${products.getNumber() + 1 <= 2 and products.totalPages >= 4}">
-                <a class="page-link" th:text="${i}" th:href="@{'/products?p=' + ${i} + ${filterDefinition}}"></a>
-            </li>
-
-            <li class="page-item" th:each="i : ${#numbers.sequence(products.getNumber() - 1, products.getTotalPages())}"
-                th:classappend="${products.getNumber() + 1 == i ? 'active' : ''}"
-                th:if="${products.getNumber() + 1 >= products.getTotalPages() - 1 and products.totalPages >= 4}">
-                <a class="page-link" th:text="${i}" th:href="@{'/products?p=' + ${i} + ${filterDefinition}}"></a>
-            </li>
-
-            <li class="page-item" th:each="i : ${#numbers.sequence(1, products.getTotalPages())}"
-                th:classappend="${products.getNumber() + 1 == i ? 'active' : ''}"
-                th:if="${products.getTotalPages() < 4}">
+            <!-- sequence(from, to, step) -->
+            <li class="page-item" th:classappend="${products.getNumber() + 1 == i ? 'active' : ''}"
+                th:each="i : ${#numbers.sequence((products.number - 1 > 0 ? products.number - 1 : 1),
+                 (products.number + 3 < products.totalPages ? products.number + 3 : products.totalPages), 1)}">
                 <a class="page-link" th:text="${i}" th:href="@{'/products?p=' + ${i} + ${filterDefinition}}"></a>
             </li>
 
