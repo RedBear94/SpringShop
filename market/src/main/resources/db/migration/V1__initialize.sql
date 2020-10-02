@@ -43,7 +43,27 @@ values
 ('Bread16', 37),
 ('Bread17', 38),
 ('Bread18', 39),
-('Bread19', 40);
+('Bread19', 40),
+('Milk1', 21),
+('Milk2', 22),
+('Milk3', 23),
+('Milk4', 24),
+('Milk5', 25),
+('Milk6', 26),
+('Milk7', 27),
+('Milk8', 28),
+('Milk9', 29),
+('Milk10', 31),
+('Milk11', 32),
+('Milk12', 33),
+('Milk13', 34),
+('Milk14', 35),
+('Milk15', 36),
+('Milk16', 37),
+('Milk17', 38),
+('Milk18', 39),
+('Milk19', 40);
+
 
 
 insert into orders (customer_id, product_id, current_price)

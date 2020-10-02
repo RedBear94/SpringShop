@@ -1,8 +1,6 @@
 package com.spring.market.repositories;
 
 import com.spring.market.entities.Order;
-import com.spring.market.entities.Product;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
