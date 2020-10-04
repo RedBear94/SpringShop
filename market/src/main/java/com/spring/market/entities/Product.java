@@ -20,18 +20,12 @@ public class Product {
     @Column(name = "title")
     private String title;
 
-    // Вариант с разрывом циклической ссылки
-    // @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
-    private List<Order> orders;
-
     @Column(name = "price")
     private int price;
-
     public Product(Long id, String title, int price) {
         this.id = id;
         this.title = title;
         this.price = price;
     }
+
 }
