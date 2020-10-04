@@ -26,4 +26,8 @@ public class Order {
 
     @Column(name = "price")
     private int price;
+
+    public void setCost(int price) {
+        this.price = price;
+    }
 }

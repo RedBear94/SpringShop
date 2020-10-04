@@ -88,4 +88,10 @@ public class Cart {
             count += o.getQuantity();
         }
     }
+
+    public void clear() {
+        price = 0;
+        count = 0;
+        items.clear();
+    }
 }

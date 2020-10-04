@@ -11,8 +11,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 
+<body>
 <div class="container">
-    <div th:replace="~{navigation :: navigation(Cart)}" />
+    <div th:replace="~{navigation :: navigation(Orders)}" />
     <h1>Ваш заказ</h1>
 
     <br>
@@ -44,21 +45,21 @@
 </div>
 
 <div class="container">
-    <form th:action="@{/card/order}" method="POST">
+    <form th:action="@{/orders/add}" method="post" >
         <div class="form-row">
             <input type="hidden" class="form-control">
             <div class="col form-group">
-                <label for="clientName">Имя клиента</label>
-                <input type="text" class="form-control" placeholder="Имя клиента" name="customer" id="clientName">
+                <label>Имя клиента</label>
+                <input type="text" class="form-control" placeholder="Имя клиента" name="customer">
             </div>
-            <!--<div class="col form-group">
+            <div class="col form-group">
                 <label>Номер телефона</label>
-                <input type="number" class="form-control" placeholder="Номер телефона">
+                <input type="number" class="form-control" placeholder="Номер телефона" name="phone">
             </div>
             <div class="col form-group">
                 <label>Адрес доставки</label>
-                <input type="text" class="form-control" placeholder="Адрес доставки">
-            </div>-->
+                <input type="text" class="form-control" placeholder="Адрес доставки" name="address">
+            </div>
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block">Оформить заказ</button>

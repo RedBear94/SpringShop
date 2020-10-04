@@ -55,17 +55,4 @@ public class CartController {
         cart.remove(productId);
         return "redirect:/cart";
     }
-
-    @GetMapping("/order")
-    public String placeYourOrder(HttpSession httpSession){
-        return "order";
-    }
-
-    @PostMapping("/order")
-    @ResponseBody
-    public String saveOrder(@ModelAttribute Order order){
-        //orderService.saveOrUpdate(order);
-        //return "redirect:/products";
-        return "ok";
-    }
 }
