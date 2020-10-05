@@ -1,5 +1,7 @@
 package com.spring.market.entities;
 
+import com.spring.market.repositories.CustomerRepository;
+import com.spring.market.services.CustomerService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
@@ -26,8 +28,4 @@ public class Order {
 
     @Column(name = "price")
     private int price;
-
-    public void setCost(int price) {
-        this.price = price;
-    }
 }

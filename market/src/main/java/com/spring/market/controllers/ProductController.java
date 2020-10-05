@@ -59,4 +59,9 @@ public class ProductController {
         productService.deleteById(id);
         return "ok";
     }
+
+    @PostMapping("/showme")
+    public void showMeObject(@RequestBody Product p) {
+        System.out.println(p);
+    }
 }
