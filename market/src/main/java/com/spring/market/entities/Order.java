@@ -1,12 +1,12 @@
 package com.spring.market.entities;
 
-import com.spring.market.repositories.CustomerRepository;
-import com.spring.market.services.CustomerService;
+import com.spring.market.utils.Cart;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,8 +19,8 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "order")
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
@@ -28,4 +28,18 @@ public class Order {
 
     @Column(name = "price")
     private int price;
+
+    @Column(name = "address")
+    private String address;
+
+    public Order(User user, Cart cart, String address){
+        this.user = user;
+        this.price = cart.getPrice();
+        this.items = new ArrayList<>();
+        this.address = address;
+        cart.getItems().stream().forEach(oi -> {
+            oi.setOrder(this);
+        });
+        cart.clear();
+    }
 }

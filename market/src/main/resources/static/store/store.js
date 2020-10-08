@@ -1,41 +1,28 @@
 angular.module('app').controller('storeController', function ($scope, $http) {
     const contextPath = 'http://localhost:8189/market';
-    let page = 1;
-    let pageCount;
-    let contentOnPage = 10;
 
-    $scope.fillTable = function () {
-        console.log('fill');
-        $http.get(contextPath + '/api/v1/products')
-            .then(function (response) {
-                $scope.Products = response.data;    // $scope - хранилище (глобальная область видимости)
-            });
-    };
-
-    $scope.applyFilter = function(next) {
-        $http.get(contextPath + '/api/v1/products/size')
-            .then(function (response) {
-                pageCount = response.data/contentOnPage;
-            });
-
-        if(next === 1 && page < pageCount){
-            page++;
-        }
-        if(next === -1 && page > 1) {
-            page--;
-        }
-
+    $scope.fillTable = function (pageIndex = 1) {
         $http({
             url: contextPath + '/api/v1/products',
             method: "GET",
-            params: {title: $scope.filterTitle,
-                min_price: $scope.filterPriceMax,
-                max_price: $scope.filterPriceMin,
-                p: page
+            params: {
+                title: $scope.filter ? $scope.filter.title : null,
+                min_price: $scope.filter ? $scope.filter.min_price : null,
+                max_price: $scope.filter ? $scope.filter.max_price : null,
+                p: pageIndex
             }
         }).then(function (response) {
-            $scope.Products = response.data;
+            $scope.ProductsPage = response.data;
+            $scope.PaginationArray = $scope.generatePagesInd(1, $scope.ProductsPage.totalPages);
         });
+    };
+
+    $scope.generatePagesInd = function(startPage, endPage) {
+        let arr = [];
+        for(let i = startPage; i < endPage + 1; i++) {
+            arr.push(i)
+        }
+        return arr;
     }
 
     $scope.submitCreateNewProduct = function () {
