@@ -24,4 +24,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
     private List<Order> orders;
+
+    public Customer(String customerName) {
+        name = customerName;
+    }
 }

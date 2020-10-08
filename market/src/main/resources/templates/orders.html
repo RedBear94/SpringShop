@@ -20,12 +20,15 @@
         <thead class="thead-dark">
         <tr>
             <th>ID</th>
+            <th>Клиент</th>
+            <!--<th>Товар</th>-->
             <th>Цена</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="o : ${orders}">
             <td th:text="${o.id}"/>
+            <td th:text="${o.customer.name}"/><!---->
             <td th:text="${o.price}"/>
         </tr>
         </tbody>
