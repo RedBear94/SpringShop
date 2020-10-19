@@ -2,8 +2,9 @@ package com.spring.market.utils;
 
 import com.spring.market.entities.OrderItem;
 import com.spring.market.entities.Product;
+import com.spring.market.exeptions.ResourceNotFoundException;
+import com.spring.market.services.ProductService;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,10 @@ import java.util.List;
 // Везде где вводится Cart создается и возвращается её копия для каждого клиента
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-@NoArgsConstructor
-@Data
+// @RequiredArgsConstructor - включена в @Data   // Автоматический создает и заполняет конструктор только final значениями
+@Data // добавит Getter/Setter
 public class Cart {
+    private final ProductService productService;
     private List<OrderItem> items;
     private int price;
     private int count;
@@ -31,19 +33,7 @@ public class Cart {
         items = new ArrayList<>();
     }
 
-    public void addOrIncrement(Product p) {
-        for (OrderItem o : items) {
-            if (o.getProduct().getId().equals(p.getId())) {
-                o.incrementQuantity();
-                recalculate();
-                return;
-            }
-        }
-        items.add(new OrderItem(p));
-        recalculate();
-    }
-
-    public void incrementOnly(Long productId) {
+    public void addOrIncrement(Long productId) {
         for (OrderItem o : items) {
             if (o.getProduct().getId().equals(productId)) {
                 o.incrementQuantity();
@@ -51,6 +41,9 @@ public class Cart {
                 return;
             }
         }
+        Product p = productService.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Unable to find product with id: " + productId + " (add to cart)"));
+        items.add(new OrderItem(p));
+        recalculate();
     }
 
     public void decrementOrRemove(Long productId) {
@@ -84,6 +77,8 @@ public class Cart {
         price = 0;
         count = 0;
         for (OrderItem o : items) {
+            o.setPricePerProduct(o.getProduct().getPrice());
+            o.setPrice(o.getProduct().getPrice() * o.getQuantity());
             price += o.getPrice();
             count += o.getQuantity();
         }

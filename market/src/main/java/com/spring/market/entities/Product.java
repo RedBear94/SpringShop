@@ -22,10 +22,14 @@ public class Product {
 
     @Column(name = "price")
     private int price;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     public Product(Long id, String title, int price) {
         this.id = id;
         this.title = title;
         this.price = price;
     }
-
 }

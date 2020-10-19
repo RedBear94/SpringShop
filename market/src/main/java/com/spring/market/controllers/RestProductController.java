@@ -1,15 +1,15 @@
 package com.spring.market.controllers;
 
+import com.spring.market.dto.ProductDto;
 import com.spring.market.entities.Product;
+import com.spring.market.exeptions.ResourceNotFoundException;
 import com.spring.market.repositories.ProductRepository;
 import com.spring.market.services.ProductService;
 import com.spring.market.utils.ProductFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 // Crud операции построенные по правилам REST API
@@ -18,9 +18,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class RestProductController {
     private ProductService productService;
-    private ProductRepository productRepository;
 
-    @GetMapping // /api/v1/products - Запрос данных
+    @GetMapping(produces = "application/json") // /api/v1/products - Запрос данных
     public Page<Product> getAllProducts(
             @RequestParam(defaultValue = "1", name = "p") Integer page,
             @RequestParam Map<String, String> params
@@ -33,23 +32,19 @@ public class RestProductController {
         return content;
     }
 
-    @GetMapping("/size")
-    public int getCount(){
-        return productRepository.findAll().size();
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public ProductDto getProductById(@PathVariable Long id) {
+        return productService.findDtoById(id).get();
+        //return productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Unable to find product with id:" + id));
     }
 
-    @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.findById(id).get();
-    }
-
-    @PostMapping // Добавление данных
+    @PostMapping(consumes = "application/json", produces = "application/json") // Добавление данных
     public Product createProduct(@RequestBody Product p) {
         p.setId(null);
         return productService.saveOrUpdate(p);
     }
 
-    @PutMapping // Модификация данных
+    @PutMapping(consumes = "application/json", produces = "application/json") // Модификация данных
     public Product updateProduct(@RequestBody Product p) {
         return productService.saveOrUpdate(p);
     }
