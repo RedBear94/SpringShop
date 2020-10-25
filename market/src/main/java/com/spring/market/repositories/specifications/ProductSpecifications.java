@@ -19,4 +19,8 @@ public class ProductSpecifications {
         // titlePart% заголовок начинается с указанного слова | %titlePart - закнчиваетс укзанным словом | %% - в s - экранирование что-бы не ожидалось значение
         return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), String.format("%%%s%%", titlePart)); // where p.title like %titlePart%
     }
+
+    public static Specification<Product> categoryIdIs(Long categoryId) {
+        return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("category").get("id"), categoryId);
+    }
 }

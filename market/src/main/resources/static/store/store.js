@@ -9,12 +9,23 @@ angular.module('app').controller('storeController', function ($scope, $http) {
                 title: $scope.filter ? $scope.filter.title : null,
                 min_price: $scope.filter ? $scope.filter.min_price : null,
                 max_price: $scope.filter ? $scope.filter.max_price : null,
+                category_id: $scope.filter ? $scope.filter.category_id : null,
                 p: pageIndex
             }
         })
             .then(function (response) {
                 $scope.ProductsPage = response.data;
                 $scope.PaginationArray = $scope.generatePagesInd(1, $scope.ProductsPage.totalPages);
+            });
+    };
+
+    $scope.getCategoriesList = function () {
+        $http({
+            url: contextPath + '/api/v1/categories',
+            method: 'GET'
+        })
+            .then(function (response) {
+                $scope.CategoriesList = response.data;
             });
     };
 
@@ -37,4 +48,5 @@ angular.module('app').controller('storeController', function ($scope, $http) {
     }
 
     $scope.fillTable();
+    $scope.getCategoriesList();
 });
