@@ -1,9 +1,7 @@
 package com.spring.market.controllers;
 
-import com.spring.market.entities.Order;
 import com.spring.market.entities.Product;
 import com.spring.market.exeptions.ResourceNotFoundException;
-import com.spring.market.services.CustomerService;
 import com.spring.market.services.OrderService;
 import com.spring.market.utils.Cart;
 import com.spring.market.services.ProductService;

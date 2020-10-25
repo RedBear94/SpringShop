@@ -5,6 +5,7 @@ import com.spring.market.repositories.ProductRepository;
 import com.spring.market.services.ProductService;
 import com.spring.market.utils.ProductFilter;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +21,16 @@ public class RestProductController {
     private ProductRepository productRepository;
 
     @GetMapping // /api/v1/products - Запрос данных
-    public List<Product> getAllProducts(
+    public Page<Product> getAllProducts(
             @RequestParam(defaultValue = "1", name = "p") Integer page,
             @RequestParam Map<String, String> params
     ) {
+        if(page < 1) {
+            page = 1;
+        }
         ProductFilter productFilter = new ProductFilter(params);
-        return productService.findAll(productFilter.getSpec(), page - 1, 10).getContent();
+        Page<Product> content = productService.findAll(productFilter.getSpec(), page - 1, 10);
+        return content;
     }
 
     @GetMapping("/size")
