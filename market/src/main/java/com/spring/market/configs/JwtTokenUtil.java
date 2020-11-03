@@ -8,10 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -44,13 +41,14 @@ public class JwtTokenUtil {
 //        return Objects.equals(username, userDetails.getUsername()) && !isTokenExpired(token);
 //    }
 
-    // собирает claims - права польщователя
+    // собирает claims - права пользователя на этапе аутентификации
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         List<String> rolesList = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        claims.put("role", rolesList);
+        // Кладем роли в claims в виде листа строк
+        claims.put("roles", rolesList);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -73,6 +71,13 @@ public class JwtTokenUtil {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public List<String> getRoles(String token) {
+        // Достаются Claims (полезная информация о клиенте)
+        // отдаем функцию объясняющую как получить из Claims - список строк (ролей)
+        // у claims запросили поле roles являющееся листом строк
+        return getClaimFromToken(token, (Function<Claims, List<String>>) claims -> claims.get("roles", List.class));
     }
 //
 //    private boolean isTokenExpired(String token) {

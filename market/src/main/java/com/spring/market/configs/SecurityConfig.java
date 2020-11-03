@@ -15,17 +15,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtRequestFilter jwtRequestFilter;
-
-//    private UserService userService;
-//    @Autowired
-//    public void setUserDetailsService(UserService userService) {
-//        this.userService = userService;
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/api/v1/**").authenticated()
+                .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .csrf().disable()
@@ -44,16 +38,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-//    @Bean
-//    public BCryptPasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Bean
-//    public DaoAuthenticationProvider daoAuthenticationProvider() {
-//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//        authenticationProvider.setPasswordEncoder(passwordEncoder());
-//        authenticationProvider.setUserDetailsService(userService);
-//        return authenticationProvider;
-//    }
 }
