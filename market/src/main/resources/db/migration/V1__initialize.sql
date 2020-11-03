@@ -26,28 +26,38 @@ values
 
 insert into users (username, password, email)
 values
-('user', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'user@gmail.com'); -- pass 100
+('user', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'user@gmail.com');
 
 insert into users_roles (user_id, role_id) values (1, 1), (1, 2);
 
-create table customers (
-    id  bigserial,
-    name    varchar(255) not null,
-    primary key (id)
+create table categories (
+    id                      bigserial primary key,
+    title                   varchar(255)
 );
 
 create table products (
-    id  bigserial primary key,
-    title   varchar(255),
-    price   int,
-    category_id bigint,
-    foreign key (category_id) references products (id)
+    id                      bigserial primary key,
+    title                   varchar(255),
+    price                   int,
+    category_id             bigint references categories (id)
 );
 
-create table categories (
-    id bigserial primary key,
-    title varchar(255)
+create table orders (
+    id                      bigserial primary key,
+    user_id                 bigint references users(id),
+    price                   int,
+    address                 varchar(1000)
 );
+
+create table order_items (
+    id                      bigserial primary key,
+    product_id              bigint references products(id),
+    order_id                bigint references orders(id),
+    price                   int,
+    price_per_product       int,
+    quantity                int
+);
+
 
 insert into categories (title)
 values
@@ -57,22 +67,6 @@ values
 ('juices'),
 ('meat products'),
 ('juices');
-
-create table orders (
-    id    bigserial primary key,
-    user_id bigint references users(id),
-    price int,
-    address varchar(1000)
-);
-
-create table order_items (
-    id                  bigserial primary key,
-    product_id          bigint references products(id),
-    order_id            bigint references orders(id),
-    price               int,
-    price_per_product   int,
-    quantity            int
-);
 
 insert into products (title, price, category_id)
 values

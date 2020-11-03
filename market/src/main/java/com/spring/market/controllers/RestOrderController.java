@@ -5,36 +5,29 @@ import com.spring.market.entities.User;
 import com.spring.market.services.OrderService;
 import com.spring.market.services.UserService;
 import com.spring.market.utils.Cart;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
-@Controller
-@RequestMapping("/orders")
-@AllArgsConstructor
-public class OrderController {
+// Crud операции построенные по правилам REST API
+@RestController // Все методы получают ResponseBody (возвращают json)
+@RequestMapping("/api/v1/order") // v1 - версирование
+@RequiredArgsConstructor
+public class RestOrderController {
     private UserService userService;
     private OrderService orderService;
     private Cart cart;
 
-    @GetMapping
-    public String showOrders(Model model) {
-        model.addAttribute("orders", orderService.findAll());
-        return "orders";
-    }
-
-    @GetMapping("/create")
-    public String showOrderPage(Principal principal, Model model) {
-        model.addAttribute("username", principal.getName());
-        return "create_order";
+    @GetMapping(produces = "application/json")
+    public List<Order> showOrders() {
+        return orderService.findAll();
     }
 
     @PostMapping("/confirm")
     @ResponseBody
-    public String confirmOrder(Principal principal,
+    public void confirmOrder(Principal principal,
                                @RequestParam(name = "address") String address,
                                @RequestParam(name = "receiver_name") String receiverName,
                                @RequestParam(name = "phone_number") String phone
@@ -42,6 +35,5 @@ public class OrderController {
         User user = userService.findByUsername(principal.getName());
         Order order = new Order(user, cart, address);
         order = orderService.save(order);
-        return "Ваш заказ #" + order.getId();
     }
 }
