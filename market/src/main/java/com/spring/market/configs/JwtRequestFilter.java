@@ -4,10 +4,9 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 // Фильтр для аутентификации, принимет от пользователя токен и проверяет его
 @Component
@@ -46,13 +46,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // выполниться если контекст пустой и пользователь существует
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // По данным пришедши в токене, кладем их в контект чтобы не обращаться к базе см. код ниже
+            // Из токена достали имя пользователя и его роль
+            // (токен нельзя подменить и он является достоверным)
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null, jwtTokenUtil.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+            SecurityContextHolder.getContext().setAuthentication(token);
+
+            /*
             // создали токен на основе userDetails и отправили в контекст
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//            if (jwtTokenUtil.validateToken(jwt, userDetails)) {
+            //if (jwtTokenUtil.validateToken(jwt, userDetails)) {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(token);
-//            }
+            //}
+            */
         }
 
         // Говорим продолжать обработку
