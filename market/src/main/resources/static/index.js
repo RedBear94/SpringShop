@@ -26,6 +26,13 @@
             .when('/cart', {
                 templateUrl: 'cart/cart.html',
                 controller: 'cartController'
+            })
+            .when('/profile', {
+                templateUrl: 'profile/profile.html',
+                controller: 'profileController'
+            })
+            .otherwise({
+                redirect: '/'
             });
 
         $httpProvider.interceptors.push(function ($q, $location) {
