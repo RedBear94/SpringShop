@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Blog {
-    public static final String EXCHANGE_NAME = "processingBlogExchanger";
+    public static final String EXCHANGE_NAME = "BlogExchanger";
 
     public static void main(String[] args) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
@@ -51,7 +51,7 @@ public class Blog {
                         }
                         break;
                     default:
-                        System.out.println("Неверная команда, список команд /h");
+                        System.out.println("Wrong Command");
                 }
             }
             System.out.print("Print your command: ");
