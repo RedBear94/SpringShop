@@ -1,6 +1,6 @@
 spring:
   flyway:
-    locations: classpath:/db/testdata
+    locations: classpath:/testdata
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:mydatabase;MODE=PostgreSQL
