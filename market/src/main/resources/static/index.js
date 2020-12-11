@@ -31,6 +31,10 @@
                 templateUrl: 'profile/profile.html',
                 controller: 'profileController'
             })
+            .when('/register', {
+                templateUrl: 'register/register.html',
+                controller: 'registerController'
+            })
             .otherwise({
                 redirect: '/'
             });
